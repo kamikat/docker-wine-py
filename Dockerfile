@@ -23,7 +23,7 @@ ENV WINEDEBUG  fixme-all
 
 ENV PATH /opt/bin:${PATH}
 
-ARG PYTHON_VERSION=2.7.9
+ARG PYTHON_VERSION=2.7.13
 
 RUN wget "https://www.python.org/ftp/python/$PYTHON_VERSION/python-$PYTHON_VERSION.msi" -O python2.msi \
  && wine msiexec /qn /i python2.msi \

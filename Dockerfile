@@ -25,9 +25,9 @@ ENV PATH /opt/bin:${PATH}
 
 ARG PYTHON_VERSION=2.7.13
 
-RUN wget "https://www.python.org/ftp/python/$PYTHON_VERSION/python-$PYTHON_VERSION.msi" -O python2.msi \
- && wine msiexec /qn /i python2.msi \
- && rm python2.msi \
+RUN wget "https://www.python.org/ftp/python/$PYTHON_VERSION/python-$PYTHON_VERSION.msi" -O package.msi \
+ && wine msiexec /qn /i package.msi \
+ && rm -f package.msi \
  && sed -i 's/_windows_cert_stores = .*/_windows_cert_stores = ("ROOT",)/' "$WINEPREFIX/drive_c/Python27/Lib/ssl.py" \
  && mkdir -p /opt/bin \
  && echo 'wine C:\\\\Python27\\\\python.exe "$@"' > /opt/bin/python \
@@ -36,7 +36,7 @@ RUN wget "https://www.python.org/ftp/python/$PYTHON_VERSION/python-$PYTHON_VERSI
  && pip install -U pip \
  && echo 'assoc .py=PythonScript' | wine cmd > /dev/null \
  && echo 'ftype PythonScript=C:\Python27\python.exe "%1" %*' | wine cmd > /dev/null \
- && while pgrep wineserver >/dev/null; do echo "Waiting for wineserver..."; sleep 1; done \
+ && wineserver -w \
  && rm -rf /tmp/.wine-*
 
 WORKDIR /opt/wine/drive_c
